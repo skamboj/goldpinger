@@ -1,6 +1,7 @@
 # Goldpinger
 
 [![Publish](https://github.com/bloomberg/goldpinger/actions/workflows/publish.yml/badge.svg)](https://github.com/bloomberg/goldpinger/actions/workflows/publish.yml)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/bloomberg/goldpinger)
 
 __Goldpinger__ makes calls between its instances to monitor your networking.
 It runs as a [`DaemonSet`](#example-yaml) on `Kubernetes` and produces `Prometheus` metrics that can be [scraped](#prometheus), [visualised](#grafana) and [alerted](#alert-manager) on.
@@ -101,14 +102,25 @@ docker push $(namespace="docker.io/myhandle/" make version)
 ```
 
 ## Installation
-
 `Goldpinger` works by asking `Kubernetes` for pods with particular labels (`app=goldpinger`). While you can deploy `Goldpinger` in a variety of ways, it works very nicely as a `DaemonSet` out of the box.
 
-### Authentication with Kubernetes API
+### Helm Installation
+Goldpinger can be installed via [Helm](https://helm.sh/) using the following:
+
+```
+helm repo add goldpinger https://bloomberg.github.io/goldpinger
+helm repo update
+helm install goldpinger goldpinger/goldpinger
+```
+
+### Manual Installation
+`Goldpinger` can be installed manually via configuration similar to the following:
+
+#### Authentication with Kubernetes API
 
 `Goldpinger` supports using a `kubeconfig` (specify with `--kubeconfig-path`) or service accounts.
 
-### Example YAML
+#### Example YAML
 
 Here's an example of what you can do (using the in-cluster authentication to `Kubernetes` apiserver).
 
@@ -118,6 +130,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: goldpinger-serviceaccount
+  namespace: default
 ---
 apiVersion: apps/v1
 kind: DaemonSet
